@@ -1,0 +1,46 @@
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Register
+    link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN", crossorigin="anonymous")
+  body
+    .container-sm
+      .row.mt-5
+      .row.mt-5
+        .col-sm-12.col-md-4.col-lg-4
+        .col-sm-12.col-md-4.col-lg-4
+          form.form
+            fieldset
+              legend.text-center.h3.mb-3 FSE Chat Registration
+
+              .mb-3
+                label(for="full_name", class="form-label") Your Name
+                input(type="text", name="full_name", class="form-control", id="full_name", aria-describedby="full_name")
+
+              .mb-3
+                label(for="email", class="form-label") Your Email
+                input(type="email", name="email", class="form-control", id="email", aria-describedby="emailAddress")
+
+              .mb-3
+                label(for="username", class="form-label") Your Username
+                input(type="text", name="username", class="form-control", id="username", aria-describedby="userName")
+ 
+
+              .mb-3
+                label(for="password", class="form-label") Password
+                input(type="password", class="form-control", id="password", name="password")
+
+              .mb-3
+                label(for="confirm_password", class="form-label") Confirm Password
+                input(type="password", class="form-control", id="confirm_password", name="confirm_password")
+
+              .row
+                .col-12
+                  button(type="submit", class="btn btn-primary", style="width: 100%; background-color: #66a3ff; color: black; font-weight: bold") Register
+
+        .col-sm-12.col-md-4.col-lg-4
+
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.5/axios.min.js') 
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js", integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL", crossorigin="anonymous")
+    script(src='/js/signup.js')

@@ -18,8 +18,16 @@ const setCookies = (token, res) => {
 };
 
 exports.signup = async (req, res, next) => {
-  console.log(req.body);
   try {
+    const { username } = req.body;
+    const user = await chatUser.findOne({ username });
+
+    if (user) {
+      return res
+        .status(400)
+        .json({ message: "This username already exists! Please find another" });
+    }
+
     const newUser = await chatUser.create({
       name: req.body.full_name,
       email: req.body.email,
@@ -49,34 +57,42 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
-  // try {
-  const { username, password } = req.body;
+  try {
+    const { username, password } = req.body;
 
-  if (!username || !password) {
-    return res
-      .status(400)
-      .json({ error: "Username and password requirements not met" });
+    if (!username || !password) {
+      return res
+        .status(400)
+        .json({ error: "Username and password requirements not met" });
+    }
+    const user = await chatUser.findOne({ username }).select("+password");
+
+    if (!user || !(await user.checkPasswords(password, user.password))) {
+      return res
+        .status(400)
+        .json({ error: "wrong password or user doesn't exist" });
+    }
+
+    const token = getToken(user._id);
+
+    setCookies(token, res);
+
+    res.status(200).json({
+      status: "login successful",
+      token,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "login failure",
+      error: err.message,
+    });
   }
-  const user = await chatUser.findOne({ username }).select("+password");
+};
 
-  if (!user || !(await user.checkPasswords(password, user.password))) {
-    return res
-      .status(400)
-      .json({ error: "wrong password or user doesn't exist" });
-  }
-
-  const token = getToken(user._id);
-
-  setCookies(token, res);
-
-  res.status(200).json({
-    status: "login successful",
-    token,
+exports.logout = (req, res) => {
+  res.cookie("jwt", "", {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
   });
-  // } catch (err) {
-  //   res.status(400).json({
-  //     status: "login failure",
-  //     message: err.message,
-  //   });
-  // }
+  res.status(200).json({ status: "loggedOut" });
 };

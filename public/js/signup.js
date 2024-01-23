@@ -1,3 +1,20 @@
+const dropAlert = () => {
+  const alert = document.querySelector(".alert");
+  if (alert) {
+    alert.parentElement.removeChild(alert);
+  }
+};
+
+const displayAlert = (status, message) => {
+  dropAlert();
+  const box = `<div class="alert alert-${status} text-center" role="alert">
+  ${message}
+</div>`;
+
+  document.querySelector("body").insertAdjacentHTML("afterbegin", box);
+  window.setTimeout(dropAlert, 5000);
+};
+
 const signup = async (
   full_name,
   email,
@@ -19,12 +36,13 @@ const signup = async (
     });
 
     if (res.data.status === "persisted") {
+      displayAlert("success", "Account Created Successfully");
       window.setTimeout(() => {
         location.assign(`/`);
       }, 1500);
     }
   } catch (err) {
-    console.log(err);
+    displayAlert("danger", err.response.data.message);
   }
 };
 

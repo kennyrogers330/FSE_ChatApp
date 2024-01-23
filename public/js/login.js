@@ -1,3 +1,20 @@
+const dropAlert = () => {
+  const alert = document.querySelector(".alert");
+  if (alert) {
+    alert.parentElement.removeChild(alert);
+  }
+};
+
+const displayAlert = (status, message) => {
+  dropAlert();
+  const box = `<div class="alert alert-${status} text-center" role="alert">
+  ${message}
+</div>`;
+
+  document.querySelector("body").insertAdjacentHTML("afterbegin", box);
+  window.setTimeout(dropAlert, 5000);
+};
+
 const login = async (username, password) => {
   try {
     const res = await axios({
@@ -10,14 +27,13 @@ const login = async (username, password) => {
     });
 
     if (res.data.status === "login successful") {
+      displayAlert("success", "Welcome to FSE ChatRoom");
       window.setTimeout(() => {
         location.assign(`/chatbox/${username}`);
       }, 1500);
     }
-    // console.log(res);
   } catch (err) {
-    alert(err.response.data.error);
-    // console.log(err.response);
+    displayAlert("danger", err.response.data.error);
   }
 };
 

@@ -28,18 +28,6 @@ io.on("connection", (socket) => {
       const chats = await chatMessage.find();
       socket.emit("chatMessages", chats);
     });
-    // socket.emit(
-    //   "botmessage",
-    //   Messageformatter("Admin", "Welcome to FSE Chat Room")
-    // );
-
-    // Broadcasting upon connection ===> Exempts the connected user from receiving the message
-    // socket.broadcast
-    //   .to(user.room)
-    //   .emit(
-    //     "botmessage",
-    //     Messageformatter("Admin", `${username} joined FSE Chat Room`)
-    //   );
   });
 
   // Listen for chatMessage

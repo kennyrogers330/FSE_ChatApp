@@ -3,6 +3,7 @@ let socket = io();
 //DOM
 const chatBody = document.querySelector(".chatBody");
 const FSEchat = document.getElementById("ChatForm");
+const loBtn = document.querySelector(".lo");
 
 // Get username from URL
 const username = window.location.pathname.split("/").pop();
@@ -48,7 +49,7 @@ function renderMessage(message) {
   const isSignedIn = message.username === username;
 
   div.innerHTML = `
-  <nav class="navbar navbar-light bg-light">
+  <nav class="navbar navbar-light bg-secondary-subtle">
     
       <span class="navbar-brand h6">${
         isSignedIn ? "Me" : message.username
@@ -62,4 +63,42 @@ function renderMessage(message) {
     </p>
   </div>`;
   document.querySelector(".chatBody").appendChild(div);
+}
+
+const dropAlert = () => {
+  const alert = document.querySelector(".alert");
+  if (alert) {
+    alert.parentElement.removeChild(alert);
+  }
+};
+
+const displayAlert = (status, message) => {
+  dropAlert();
+  const box = `<div class="alert alert-${status}" role="alert">
+  ${message}
+</div>`;
+
+  document.querySelector("body").insertAdjacentHTML("afterbegin", box);
+  window.setTimeout(dropAlert, 5000);
+};
+
+const logout = async () => {
+  try {
+    const res = await axios({
+      method: "GET",
+      url: "http://localhost:3000/api/users/logout",
+    });
+
+    if (res.data.status === "loggedOut") {
+      window.setTimeout(() => {
+        location.assign(`/`);
+      }, 1500);
+    }
+  } catch (err) {
+    displayAlert("danger", "Something went wrong while logging out! Try again");
+  }
+};
+
+if (loBtn) {
+  loBtn.addEventListener("click", logout);
 }
